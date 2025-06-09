@@ -19,6 +19,14 @@
                     type="email" 
                     class="p-inputtext" fluid/>
                 </label>
+                <label for="" class="labels-inputs">
+                    Celular
+                    <InputMask 
+                    v-model="studentPhone" 
+                    placeholder="ex: (11) 99999-9999" 
+                    mask="(99) 99999-9999" 
+                    class="p-inputtext" />
+                </label>
             </div>
 
             <div class="container-numbers">
@@ -89,6 +97,7 @@
 
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
+import InputMask from 'primevue/inputmask';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
@@ -109,6 +118,7 @@ const viewMode = ref<'register-student' | 'setup-plan'>('register-student');
 
 const studentName: Ref<string> = ref('');
 const studentEmail: Ref<string> = ref('');
+const studentPhone: Ref<string> = ref('');
 const studentWeight: Ref<number | null> = ref(null);
 const studentHeight: Ref<number | null> = ref(null);
 const studentBirthDate: Ref<Date | null> = ref(null);
