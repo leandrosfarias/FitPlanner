@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Button from "primevue/button"
 
 const username = ref('')
 const password = ref('')
@@ -50,6 +51,7 @@ function handleLogin() {
             </div>
             <div id="login-button-container">
               <button type="submit" @click="handleLogin" id="login-button">Entrar</button>
+               <!-- <Button label="Entrar" @click="handleLogin" /> -->
             </div>
         </form>
     </div>

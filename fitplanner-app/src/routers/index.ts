@@ -1,12 +1,21 @@
 import { createRouter, createWebHistory, } from 'vue-router';
 import Login from '../views/Login.vue';
-import CoachDashboard from '../views/CoachDashboard.vue';
-import ClientDashboard from '../views/ClientDashboard.vue';
+import CoachDashboard from '../views/CoachDashboard/CoachDashboard.vue';
+import StudentsScreen from '../views/CoachDashboard/components/StudentsScreen.vue';
+import CoachDashboardHome from '../views/CoachDashboard/components/CoachDashboardHome.vue';
+
 
 const routes: Array<any> = [
     { path: '/', component: Login },
-    { path: '/dashboard/coach', component: CoachDashboard },
-    { path: '/dashboard/client', component: ClientDashboard },
+
+    {
+        path: '/coach-dashboard',
+        component: CoachDashboard,
+        children: [
+            { path: '', component: CoachDashboardHome },
+            { path: 'students', component: StudentsScreen }
+        ]
+    }
 ]
 
 const router = createRouter({
