@@ -19,6 +19,5 @@ header {
     background-color: #0e6292;
     color: white;
     padding: 1em;
-    /* text-align: center; */
 }
 </style>

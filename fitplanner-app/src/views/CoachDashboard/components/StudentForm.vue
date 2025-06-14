@@ -1,95 +1,107 @@
 <template>
-    <section v-show="step === 1" class="form-section">
-        <div id="student-form" v-if="viewMode === 'register-student'">
-            <h1>Cadastrar Novo Atleta</h1>
-            <div class="container-inputs">
-                <label for="" class="labels-inputs">
-                    Nome Completo
-                    <InputText 
-                    v-model="studentName" 
-                    placeholder="ex: Leandro Farinha" 
-                    type="text" 
-                    class="p-inputtext" fluid/>
-                </label>
-                <label for="" class="labels-inputs">
-                    Email
-                    <InputText 
-                    v-model="studentEmail" 
-                    placeholder="ex: leandro@email.com" 
-                    type="email" 
-                    class="p-inputtext" fluid/>
-                </label>
-                <label for="" class="labels-inputs">
-                    Celular
-                    <InputMask 
-                    v-model="studentPhone" 
-                    placeholder="ex: (11) 99999-9999" 
-                    mask="(99) 99999-9999" 
-                    class="p-inputtext" />
-                </label>
-            </div>
-
-            <div class="container-numbers">
-                <label for="weight" class="label-number">
-                    Peso (kg)
-                    <div class="container-input-number">
-                        <InputNumber v-model="studentWeight" placeholder="Peso (kg)" mode="decimal" class="p-inputnumber" :minFractionDigits="2" :maxFractionDigits="5"/>
+    <section class="form-section">
+        <h1>Cadastrar Novo Atleta</h1>
+        <div id="scroll-wrapper">
+            <div id="form-container">
+                <div class="form-sc" v-if="viewMode === 'register-student'">
+                    <div id="header-form">
+                        <img :src="icon" @click="switchIcon()" alt="Seta para frente"
+                            :class="{ 'arrow-icon': true, 'arrow-icon-rotated': !viewSectionStudentData }" />
+                        <h4>Informações do aluno</h4>
                     </div>
-                </label>
-                <label for="height" class="label-number">
-                    Altura (cm)
-                    <div class="container-input-number">
-                        <InputNumber v-model="studentHeight" placeholder="Altura (cm)" mode="decimal" class="p-inputnumber" :minFractionDigits="2" :maxFractionDigits="5"/>
+                    <div id="form-section-student-data" v-show="!viewSectionStudentData">
+                        <div class="container-inputs">
+                            <label for="" class="labels-inputs">
+                                Nome Completo
+                                <InputText v-model="studentName" placeholder="ex: Leandro Farinha" type="text"
+                                    class="p-inputtext" fluid />
+                            </label>
+                            <label for="" class="labels-inputs">
+                                Email
+                                <InputText v-model="studentEmail" placeholder="ex: leandro@email.com" type="email"
+                                    class="p-inputtext" fluid />
+                            </label>
+                            <label for="" class="labels-inputs">
+                                Celular
+                                <InputMask v-model="studentPhone" placeholder="ex: (11) 99999-9999"
+                                    mask="(99) 99999-9999" class="p-inputtext" />
+                            </label>
+                        </div>
+
+                        <div class="container-numbers">
+                            <label for="weight" class="label-number">
+                                Peso (kg)
+                                <div class="container-input-number">
+                                    <InputNumber v-model="studentWeight" placeholder="Peso (kg)" mode="decimal"
+                                        class="p-inputnumber" :minFractionDigits="2" :maxFractionDigits="5" />
+                                </div>
+                            </label>
+                            <label for="height" class="label-number">
+                                Altura (cm)
+                                <div class="container-input-number">
+                                    <InputNumber v-model="studentHeight" placeholder="Altura (cm)" mode="decimal"
+                                        class="p-inputnumber" :minFractionDigits="2" :maxFractionDigits="5" />
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="third-row">
+                            <label for="" class="labels-inputs">
+                                Gênero
+                                <Select v-model="selectedGender" :options="genderOptions" optionLabel="label"
+                                    placeholder="Selecione um Gênero" class="" />
+                            </label>
+                            <label for="" class="labels-inputs">
+                                Objetivo
+                                <Select v-model="studentGoal" :options="goals" optionLabel="label"
+                                    placeholder="Selecione um Objetivo" class="" />
+                            </label>
+                        </div>
+
+                        <div id="fourth-row">
+                            <label for="" class="labels-inputs">
+                                Data de Nascimento
+                                <DatePicker v-model="studentBirthDate" placeholder="Data de Nascimento"
+                                    class="p-datepicker" />
+                            </label>
+                        </div>
+
+                        <div id="fifth-row">
+                            <label for="" class="labels-inputs">
+                                Observações sobre o Aluno
+                                <Textarea v-model="studentObservations" placeholder="ex: Tem a coluna meia torta"
+                                    rows="3" class="p-textarea" />
+                            </label>
+                        </div>
+                        <div id="container-button-next">
+                            <Button label="Montar plano de treino" @click="switchFormSectionSetupPlan()"/>
+                        </div>
+
                     </div>
-                </label>
-            </div>
-            
-            <div id="third-row">
-                <label for="" class="labels-inputs">
-                    Gênero
-                    <Select v-model="selectedGender" :options="genderOptions" optionLabel="label" placeholder="Selecione um Gênero" class="" />
-                </label>
-                <label for="" class="labels-inputs">
-                    Objetivo
-                    <Select v-model="studentGoal" :options="goals" optionLabel="label" placeholder="Selecione um Objetivo" class="" />
-                </label>
-            </div>
 
-            <div id="fourth-row">
-                <label for="" class="labels-inputs">
-                    Data de Nascimento
-                    <DatePicker v-model="studentBirthDate" placeholder="Data de Nascimento" class="p-datepicker" />
-                </label>
-            </div>
-
-            <div id="fifth-row">
-                <label for="" class="labels-inputs">
-                    Observações sobre o Aluno
-                    <Textarea v-model="studentObservations" placeholder="ex: Tem a coluna meia torta" rows="3" class="p-textarea" />
-                </label>
-            </div>
-
-            <div id="container-btn-setup-plan">
-                <Button 
-                icon="pi pi-plus"
-                id="setup-plan-button" 
-                class="button" 
-                label="Montar Plano de treino"
-                @click="setupPlan" 
-                raised 
-                severity="contrast"/>
-            </div>
-
-            <div id="container-buttons">
-                <Button id="save-button" class="button" label="Cadastrar" @click="saveStudent" :disabled="disabledButton"/>
-                <Button id="cancel-button" class="button" label="Cancelar" severity="warn" @click="cancelForm"/>
+                </div>
+                <div id="form-container-setup-plan" class="form-sc">
+                    <div id="header-form">
+                        <img :src="icon" @click="switchFormSectionSetupPlan" alt="Seta para frente"
+                            :class="{ 'arrow-icon': true, 'arrow-icon-rotated': !viewSectionSetupPlan }" />
+                        <h4>Montar Plano de Treino</h4>
+                    </div>
+                    <div v-show="!viewSectionSetupPlan" class="form-content">
+                        <Button icon="pi pi-plus" id="setup-plan-button" class="button" label="Adicionar Treino"
+                            @click="setupPlan" raised severity="contrast" />
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-    <section v-show="step === 2" class="form-section">
-        <div>
-            <SetupTrainingPlan :student="student" />
+        <!-- <div id="container-btn-setup-plan">
+            <Button icon="pi pi-plus" id="setup-plan-button" class="button" label="Montar Plano de treino"
+                @click="setupPlan" raised severity="contrast" />
         </div>
+
+        <div id="container-buttons">
+            <Button id="save-button" class="button" label="Cadastrar" @click="saveStudent" :disabled="disabledButton" />
+            <Button id="cancel-button" class="button" label="Cancelar" severity="warn" @click="cancelForm" />
+        </div> -->
     </section>
 </template>
 
@@ -112,6 +124,11 @@ import { LocalStudentRepository } from '../../../services/LocalStudentRepository
 import type { Student } from '../../../interfaces/Student';
 import { v4 as uuidv4 } from 'uuid';
 
+import arrowForwardIcon from '../../../assets/icons/arrow_forward_black_2.svg';
+import arrowDownIcon from '../../../assets/icons/keyboard_arrow_down_2.svg';
+
+
+const icon = ref(arrowForwardIcon);
 
 const studentRepository = new LocalStudentRepository();
 const viewMode = ref<'register-student' | 'setup-plan'>('register-student');
@@ -157,13 +174,14 @@ watchEffect(() => {
 
 async function createAndSaveStudent() {
     // Lógica para criar e salvar o aluno
-     const newStudent: Student = {
+    const newStudent: Student = {
         id: uuidv4(),
         name: studentName.value,
         email: studentEmail.value,
         weight: studentWeight.value ?? 0,
         height: studentHeight.value ?? 0,
         birthDate: studentBirthDate.value?.toISOString() ?? '',
+        createdAt: new Date(),
         gender: selectedGender.value,
         observations: studentObservations.value,
         goal: studentGoal.value,
@@ -177,7 +195,7 @@ async function createAndSaveStudent() {
 
 async function saveStudent() {
     // Lógica para salvar o aluno
-   await createAndSaveStudent();
+    await createAndSaveStudent();
 }
 
 async function setupPlan() {
@@ -191,11 +209,59 @@ async function setupPlan() {
 function cancelForm() {
     emits('cancel');
 }
+
+function switchIcon() {
+    // icon.value = icon.value === arrowForwardIcon ? arrowDownIcon : arrowForwardIcon;
+    switchFormSectionStudentData();
+}
+
+
+const viewSectionStudentData = ref(false);
+
+function switchFormSectionStudentData() {
+    viewSectionStudentData.value = !viewSectionStudentData.value;
+}
+
+const viewSectionSetupPlan = ref(true);
+function switchFormSectionSetupPlan() {
+    viewSectionSetupPlan.value = !viewSectionSetupPlan.value;
+    switchFormSectionStudentData();
+}
 </script>
 
 <style scoped>
 
-#student-form {
+#scroll-wrapper {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+#form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    /* height: 180vh;
+    overflow-y: scroll; */
+}
+
+.form-sc {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: auto;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+}
+
+#student-form,
+#setup-plan-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -204,34 +270,54 @@ function cancelForm() {
     max-height: 80vh;
     overflow-y: auto;
     padding: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#setup-plan-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+    margin: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#header-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 #gender-label {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 1rem;
 }
 
 .radio-group {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-  margin-top: 0.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-top: 0.5rem;
 }
 
 .radio-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
 }
 
 .radio-option label {
-  cursor: pointer;
+    cursor: pointer;
 }
-
 
 .container-numbers {
     display: flex;
@@ -242,13 +328,13 @@ function cancelForm() {
 }
 
 .input-number {
-  max-width: 120px;
-  width: 100%;
+    max-width: 120px;
+    width: 100%;
 }
 
 .input-number .p-inputtext {
-  padding: 0.5em;
-  font-size: 0.9rem;
+    padding: 0.5em;
+    font-size: 0.9rem;
 }
 
 .label-number {
@@ -296,12 +382,12 @@ function cancelForm() {
 }
 
 #setup-plan-button {
-    width: 100%;
-    max-width: 200px;
-    margin: auto;
-    padding: 0.5rem 1rem;
+    /* width: 100%; */
+    /* white-space: nowrap; */
+    /* padding-left: 1rem; */
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: bolder;
+    border-radius: 8px;
 }
 
 .button {
@@ -340,5 +426,40 @@ h1 {
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
+}
+
+#header-form {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    /* width: 24px;
+    height: 24px; */
+    transition: transform 0.3s ease;
+}
+
+.arrow-icon-rotated {
+    transform: rotate(90deg);
+}
+
+.form-content {
+    padding: 0 1.5rem 0 1.5rem;
+}
+
+#form-section-student-data {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#container-button-next {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 </style>

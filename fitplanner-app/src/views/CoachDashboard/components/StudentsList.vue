@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import StudentItem from './StudentItem.vue';
 import { LocalStudentRepository } from '../../../services/LocalStudentRepository';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, defineProps } from 'vue';
 import type { Student } from '../../../interfaces/IStudentRepository';
 import type { Ref } from 'vue';
 
@@ -21,6 +21,8 @@ const studentRepository = new LocalStudentRepository();
 
 const students: Ref<Student[]> = ref([]);
 const studentsMap: Ref<{ id: string; name: string; userImage: string }[]> = ref([]);
+
+const sortingMode = ref<'recent' | 'oldest' | 'az' | 'za'>('recent');
 
 onMounted(async () => {
   try {
@@ -31,8 +33,16 @@ onMounted(async () => {
       name: student.name,
       userImage: student.userImage || 'https://cdn-icons-png.flaticon.com/512/64/64572.png' // Default image if none provided
     }));
+    // Sort students based on the selected sorting mode
   } catch (error) {
     console.error('Error fetching students:', error);
+  }
+});
+
+const props = defineProps({
+  sortingMode: {
+    type: String as () => 'recent' | 'oldest' | 'az' | 'za',
+    default: 'recent'
   }
 });
 </script>
@@ -44,6 +54,10 @@ onMounted(async () => {
     padding: 0; /* Remove default padding */
     overflow-y: auto; /* Enable vertical scrolling if needed */
     max-height: 400px; /* Set a maximum height for the list */
+    /* border: 1px solid #ddd;
+    border-radius: 8px; */
+    margin: 0; /* Remove default margin */
+    padding: 1.5em; /* Add some padding for better spacing */
 }
 
 .client-list-header {

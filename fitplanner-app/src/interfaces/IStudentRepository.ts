@@ -6,6 +6,7 @@ export interface Student {
     height: number;
     gender: string;
     birthDate: string;
+    createdAt: Date;
     goal: string;
     userImage?: any;
 }

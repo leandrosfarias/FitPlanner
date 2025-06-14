@@ -15,6 +15,15 @@
         </button>
     </div>
     <div id="main-content">
+        <div id="container-sorting-options" v-if="viewMode === 'list'">
+            <h3>Ordenar por:</h3>
+            <Select 
+            v-model="sortingMode" 
+            :options="sortingModes" 
+            option-label="label" 
+            option-value="value"
+            />
+        </div>
         <StudentsList v-if="viewMode === 'list'"/>
         <StudentForm v-else @cancel="goToStudentList" @submit="goToStudentList"/>
     </div>
@@ -23,12 +32,22 @@
 <script setup lang="ts">
 
 import 'primeicons/primeicons.css'
+import Select from 'primevue/select';
 import StudentForm from './StudentForm.vue';
 import StudentsList from './StudentsList.vue';
 
 import { ref } from 'vue';
 
 const viewMode = ref<'list' | 'form'>('list');
+
+const sortingModes = [
+    { label: 'Mais recentes', value: 'recent' },
+    { label: 'Mais antigos', value: 'oldest' },
+    { label: 'A → Z', value: 'az' },
+    { label: 'Z → A', value: 'za' },
+];
+
+const sortingMode = ref('recent');
 
 function goToStudentForm() {
     viewMode.value = 'form';
@@ -69,6 +88,7 @@ function goToStudentList() {
     align-items: center;
     margin-top: 1.5rem;
     margin-bottom: 1rem;
+    margin-left: 1.8rem;
     gap: 1.5rem;
 }
 
@@ -97,5 +117,13 @@ function goToStudentList() {
     background-color: #f4f4f4;
     border-radius: 8px;
     font-size: 16px;
+}
+
+#container-sorting-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 </style>
