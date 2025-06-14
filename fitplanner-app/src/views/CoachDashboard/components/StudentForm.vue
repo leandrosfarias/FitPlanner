@@ -86,9 +86,10 @@
                             :class="{ 'arrow-icon': true, 'arrow-icon-rotated': !viewSectionSetupPlan }" />
                         <h4>Montar Plano de Treino</h4>
                     </div>
+                    <TrainingForm :letter="lettersToNumbers[index + 1]" v-for="(training, index) in trainingList" :key="index" />
                     <div v-show="!viewSectionSetupPlan" class="form-content">
                         <Button icon="pi pi-plus" id="setup-plan-button" class="button" label="Adicionar Treino"
-                            @click="setupPlan" raised severity="contrast" />
+                            @click="addTraining" raised severity="contrast" />
                     </div>
                 </div>
             </div>
@@ -127,6 +128,7 @@ import { v4 as uuidv4 } from 'uuid';
 import arrowForwardIcon from '../../../assets/icons/arrow_forward_black_2.svg';
 import arrowDownIcon from '../../../assets/icons/keyboard_arrow_down_2.svg';
 
+import TrainingForm from './TrainingForm.vue';
 
 const icon = ref(arrowForwardIcon);
 
@@ -159,6 +161,40 @@ const genderOptions = [
 const student: Ref<Student | null> = ref(null);
 
 const step = ref(1);
+
+const currentIndex: Ref<number> = ref(1);
+
+const trainingList = ref([
+    `Treino ${currentIndex.value}`,
+]);
+
+function addTraining() {
+    currentIndex.value++;
+    trainingList.value.push(`Treino ${currentIndex.value}`);
+}
+
+const lettersToNumbers: Record<number, string> = {
+    1: 'A',
+    2: 'B',
+    3: 'C',
+    4: 'D',
+    5: 'E',
+    6: 'F',
+    7: 'G',
+    8: 'H',
+    9: 'I',
+    10: 'J',
+    11: 'K',
+    12: 'L',
+    13: 'M',
+    14: 'N',
+    15: 'O',
+    16: 'P',
+    17: 'Q',
+    18: 'R',
+    19: 'S',
+    20: 'T'
+};
 
 function goToStep(n: number) {
     step.value = n;
@@ -200,10 +236,11 @@ async function saveStudent() {
 
 async function setupPlan() {
     // Lógica para configurar o plano do aluno
-    console.log('Configurar Plano para:', studentName.value);
+    // console.log('Configurar Plano para:', studentName.value);
     // viewMode.value = 'setup-plan';
-    goToStep(2);
-    await createAndSaveStudent();
+    // goToStep(2);
+    // await createAndSaveStudent();
+    addTraining();
 }
 
 function cancelForm() {

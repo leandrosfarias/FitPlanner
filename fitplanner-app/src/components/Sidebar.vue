@@ -15,8 +15,8 @@ const isActive = (path: string) => route.path === path;
             <li :class="{ 'item-selected': isActive('/coach-dashboard/clients') }" @click="selectedItem = 'students'">
                 <router-link to="/coach-dashboard/students">📋 Alunos</router-link>
             </li>
-            <li :class="{ 'item-selected': isActive('/coach-dashboard/workouts') }" @click="selectedItem = 'workouts'">
-                <router-link to="/coach-dashboard/workouts">🏋️ Treinos</router-link>
+            <li :class="{ 'item-selected': isActive('/coach-dashboard/exercises') }" @click="selectedItem = 'workouts'">
+                <router-link to="/coach-dashboard/exercises">🏋️ Exercícios</router-link>
             </li>
             <li :class="{ 'item-selected': isActive('/coach-dashboard/progress') }" @click="selectedItem = 'progress'">
                 <router-link to="/coach-dashboard/progress">📈 Progresso</router-link>
