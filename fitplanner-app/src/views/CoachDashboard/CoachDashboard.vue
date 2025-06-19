@@ -5,7 +5,7 @@ import Sidebar from '../../components/Sidebar.vue';
 </script>
 
 <template>
-  <Header />
+  <!-- <Header /> -->
   <div class="app-layout">
     <Sidebar id="sidebar" />
     <div class="dashboard-content">
@@ -25,13 +25,14 @@ import Sidebar from '../../components/Sidebar.vue';
   display: flex;
   flex-direction: row;
   height: 100vh;
-  
+  width: 100%;
+  background-color: #F8FAFC;
 }
 
 .dashboard-content {
   flex: 1;
   padding: 1em;
-  background-color: #f4f4f4;
+  background-color: #F8FAFC;
   max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
