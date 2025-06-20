@@ -1,129 +1,144 @@
 <template>
-    <div class="first-row" v-if="viewMode === 'list'">
-        <div class="search-bar">
-            <i class="pi pi-search search-icon"></i>
-            <input
-            type="text" 
-            name="clientSearch" 
-            id="clientSearch" 
-            placeholder="Buscar aluno">
+    <div>
+        <div id="row-1">
+            <h1>Alunos</h1>
+            <button class="bg-indigo-600 text-white" id="button-add-student">
+                <i class="fas fa-user-plus"></i>
+                <span>Adicionar Novo Aluno</span>
+            </button>
         </div>
-        <button 
-        id="add-client-button" 
-        @click="goToStudentForm">
-            + Novo Aluno
-        </button>
-    </div>
-    <div id="main-content">
-        <div id="container-sorting-options" v-if="viewMode === 'list'">
-            <h3>Ordenar por:</h3>
-            <Select 
-            v-model="sortingMode" 
-            :options="sortingModes" 
-            option-label="label" 
-            option-value="value"
-            />
+
+        <div id="search-section" class="bg-white">
+            <div class="block">
+                <label for="search-bar">Buscar aluno:</label>
+                <div id="search-bar-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="search-bar" id="search-bar" placeholder="Nome, email ou celular do aluno">
+                </div>
+            </div>
+            <div class="block">
+                <label for="">Ordenar por:</label>
+                <select name="" id="sorting-select">
+                    <option v-for="mode in sortingModes" :key="mode.value" :value="mode.value">
+                        {{ mode.labels || mode.label }}
+                    </option>
+                </select>
+            </div>
         </div>
-        <StudentsList v-if="viewMode === 'list'"/>
-        <StudentForm v-else @cancel="goToStudentList" @submit="goToStudentList"/>
     </div>
 </template>
 
 <script setup lang="ts">
-
-import 'primeicons/primeicons.css'
-import Select from 'primevue/select';
-import StudentForm from './StudentForm.vue';
-import StudentsList from './StudentsList.vue';
-
 import { ref } from 'vue';
 
-const viewMode = ref<'list' | 'form'>('list');
-
-const sortingModes = [
-    { label: 'Mais recentes', value: 'recent' },
-    { label: 'Mais antigos', value: 'oldest' },
-    { label: 'A → Z', value: 'az' },
-    { label: 'Z → A', value: 'za' },
-];
-
-const sortingMode = ref('recent');
-
-function goToStudentForm() {
-    viewMode.value = 'form';
-}
-
-function goToStudentList() {
-    viewMode.value = 'list';
-}
+const sortingModes = ref([
+    { labels: 'Mais recentes', value: 'recent' },
+    { labels: 'Mais antigos', value: 'oldest' },
+    { labels: 'Nome A-Z', value: 'name_az' },
+    { labels: 'Nome Z-A', value: 'name_za' },
+    { label: 'Nome', value: 'name' },
+    { label: 'Email', value: 'email' },
+    { label: 'Celular', value: 'phone' },
+]);
 </script>
 
 <style scoped>
-
-.search-bar {
-    position: relative;
-    width: 50%;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 0.5rem 0.5rem 0.5rem 2.5rem;
-  border-radius: 16px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.search-icon {
-  position: absolute;
-  top: 50%;
-  left: 0.8rem;
-  transform: translateY(-50%);
-  color: #888;
-}
-
-.first-row {
+#row-1 {
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-    margin-left: 1.8rem;
-    gap: 1.5rem;
 }
 
-#add-client-button {
-    background-color: #0e6292;
-    color: white;
+#search-section{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bg-white {
+    background-color: #fff;
+}
+
+#search-bar {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+}
+
+#search-bar:focus {
+    outline: none;
+    border-color: #6366F1; /* Focus color */
+}
+
+#search-bar-container {
+    width: 100%;
+    position: relative;
+}
+
+#search-bar-container input {
+    width: 100%;
+    padding-left: 2rem; /* Space for the icon */
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+#search-bar-container i {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa; /* Icon color */
+}
+
+#sorting-select {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+#sorting-select:focus {
+    outline: none;
+    border-color: #6366F1; /* Focus color */
+}
+
+.bg-indigo-600 {
+    background-color: #4f46e5;
+    /* bg-indigo-600 */
+    transition: background-color 200ms ease-in-out, transform 200ms ease-in-out;
+    /* transition duration-200 ease-in-out */
+}
+
+.bg-indigo-600:hover {
+    background-color: #4338ca;
+    /* hover:bg-indigo-700 */
+    transform: scale(1.0);
+    /* hover:scale-100 (manter o mesmo tamanho, mas a propriedade está lá) */
+}
+
+.text-white {
+    color: #fff;
+}
+
+#button-add-student {
     padding: 0.5rem 1rem;
+    border-radius: 8px;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-    font-weight: 600;
-}
-
-#add-client-button:hover {
-    background-color: #0b4f6c;
-}
-
-#add-client-button:active {
-    background-color: #083a4c;
-}
-
-#main-content {
-    padding: 1rem;
-    background-color: #f4f4f4;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-#container-sorting-options {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.0rem;
 }
 </style>
