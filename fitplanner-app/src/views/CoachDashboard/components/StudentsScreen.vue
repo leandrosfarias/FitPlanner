@@ -25,11 +25,30 @@
                 </select>
             </div>
         </div>
+
+        <!-- Lista de alunos -->
+        <StudentsList :students="mockStudents"/>
+        <div></div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import StudentsList from './StudentsList.vue';
+
+type Student = {
+    name: string;
+    email: string;
+    status: 'Ativo' | 'Inativo';
+};
+
+const mockStudents: Student[] = [
+  { name: 'Carlos Eduardo Santos', email: 'carlos.santos@email.com', status: 'Ativo' },
+  { name: 'Mariana Almeida', email: 'mariana.almeida@email.com', status: 'Ativo' },
+  { name: 'João Silva', email: 'joao.silva@email.com', status: 'Inativo' },
+  { name: 'Leandro Silva Farias', email: 'leandro.farias@email.com', status: 'Ativo' },
+  { name: 'Ketlyn De Jesus Feitosa', email: 'ketlyn.feitosa@email.com', status: 'Ativo' }
+];
 
 const sortingModes = ref([
     { labels: 'Mais recentes', value: 'recent' },
@@ -55,6 +74,8 @@ const sortingModes = ref([
     gap: 2.5rem;
     padding: 1.5rem;
     border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
 }
 
 .block {
