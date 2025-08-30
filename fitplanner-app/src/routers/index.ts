@@ -4,17 +4,22 @@ import CoachDashboard from '../views/CoachDashboard/CoachDashboard.vue';
 import StudentsScreen from '../views/CoachDashboard/components/StudentsScreen.vue';
 import CoachDashboardHome from '../views/CoachDashboard/components/CoachDashboardHome.vue';
 import ExercisesScreen from '../views/CoachDashboard/components/ExercisesScreen.vue';
+import Cadastrotreino from '../views/CoachDashboard/Cadastrotreino.vue';
+import StudentDetails from '../views/CoachDashboard/components/StudentDetails.vue';
+import StudentForm from '../views/CoachDashboard/components/StudentForm.vue';
+
 
 const routes: Array<any> = [
     { path: '/', component: Login },
-
     {
-        path: '/coach-dashboard',
+        path: '/dashboard/coach',
         component: CoachDashboard,
         children: [
-            { path: '', component: CoachDashboardHome },
+            { path: 'home', component: Cadastrotreino },
             { path: 'students', component: StudentsScreen },
-            { path: 'exercises', component: ExercisesScreen }
+            { path: 'exercises', component: ExercisesScreen },
+            { path: 'students/:id', name: 'student-details', component: StudentDetails },
+            { path: 'create-student', component: StudentForm }
         ]
     }
 ]

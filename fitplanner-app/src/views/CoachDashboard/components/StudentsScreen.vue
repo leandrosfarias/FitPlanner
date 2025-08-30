@@ -2,10 +2,12 @@
     <div>
         <div id="row-1">
             <h1>Alunos</h1>
-            <button class="bg-indigo-600 text-white" id="button-add-student">
-                <i class="fas fa-user-plus"></i>
-                <span>Adicionar Novo Aluno</span>
-            </button>
+            <router-link to="/dashboard/coach/create-student">
+                <button class="bg-indigo-600 text-white" id="button-add-student">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Adicionar Novo Aluno</span>
+                </button>
+            </router-link>
         </div>
 
         <div id="search-section" class="bg-white">
@@ -27,28 +29,25 @@
         </div>
 
         <!-- Lista de alunos -->
-        <StudentsList :students="mockStudents"/>
+        <StudentsList :students="students"/>
         <div></div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import StudentsList from './StudentsList.vue';
+import type { IStudent } from '../../../interfaces/IStudentRepository';
+import { LocalStudentRepository } from '../../../services/LocalStudentRepository';
 
-type Student = {
-    name: string;
-    email: string;
-    status: 'Ativo' | 'Inativo';
-};
+const studentRepository = new LocalStudentRepository();
+const students = ref<IStudent[]>([]);
 
-const mockStudents: Student[] = [
-  { name: 'Carlos Eduardo Santos', email: 'carlos.santos@email.com', status: 'Ativo' },
-  { name: 'Mariana Almeida', email: 'mariana.almeida@email.com', status: 'Ativo' },
-  { name: 'João Silva', email: 'joao.silva@email.com', status: 'Inativo' },
-  { name: 'Leandro Silva Farias', email: 'leandro.farias@email.com', status: 'Ativo' },
-  { name: 'Ketlyn De Jesus Feitosa', email: 'ketlyn.feitosa@email.com', status: 'Ativo' }
-];
+
+onMounted(async () => {
+    students.value = await studentRepository.getAll();
+    console.log('Fetched students:', students.value);
+});
 
 const sortingModes = ref([
     { labels: 'Mais recentes', value: 'recent' },

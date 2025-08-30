@@ -5,14 +5,17 @@ import Sidebar from '../../components/Sidebar.vue';
 </script>
 
 <template>
-  <!-- <Header /> -->
   <div class="app-layout">
-    <Sidebar id="sidebar" />
-    <div class="dashboard-content">
-      <router-view />
+    <!-- <Header /> -->
+    <div class="content-wrapper">
+      <Sidebar />
+      <main class="main-content">
+        <router-view />
+      </main>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .column {
@@ -21,22 +24,28 @@ import Sidebar from '../../components/Sidebar.vue';
   font-size: 1.2em;
 }
 
+/* CoachDashboard.vue style block */
 .app-layout {
   display: flex;
-  flex-direction: row;
   height: 100vh;
   width: 100%;
-  background-color: #F8FAFC;
 }
 
-.dashboard-content {
-  flex: 1;
-  padding: 1em;
-  background-color: #F8FAFC;
-  max-width: 900px;
-  margin: 0 auto;
+.content-wrapper {
+  display: flex;
+  flex: 1; /* Isso é crucial para que o conteúdo ocupe o espaço restante */
+}
+
+/* Garanta que o conteúdo principal (onde o router-view está) ocupe o espaço */
+.main-content {
+  flex: 1; /* Permite que o main-content ocupe o espaço restante após a sidebar */
+  overflow-y: auto; /* Adicione scroll se o conteúdo for muito longo */
   padding: 1rem;
-  /* height: 500px; */
 }
 
+/* Opcional: garanta que a sidebar tenha uma largura fixa */
+.sidebar {
+  width: 250px; /* Exemplo de largura */
+  flex-shrink: 0;
+}
 </style>

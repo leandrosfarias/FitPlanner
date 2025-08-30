@@ -1,22 +1,24 @@
 <template>
   <div id="students-list">
-    <StudentItem v-for="student in students" :key="student.email" v-bind="student" />
+    <StudentItem v-for="student in students" :key="student.id" :student="student" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import StudentItem from './StudentItem.vue';
+import StudentItem from './StudentItem.vue'; 
+import type { IStudent } from '../../../models/IStudent';
 
-type Student = {
-  name: string;
-  email: string;
-  status: 'Ativo' | 'Inativo';
-};
+// type Student = {
+//   id: string;
+//   name: string;
+//   email: string;
+//   status: 'Ativo' | 'Inativo';
+// };
 
 const props = defineProps({
   students: {
-    type: Array as () => Student[],
+    type: Array as () => IStudent[],
   }
 });
 </script>

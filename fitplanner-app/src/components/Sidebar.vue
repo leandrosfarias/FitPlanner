@@ -14,18 +14,18 @@ const isActive = (path: string) => route.path === path;
     <nav class="flex-1">
       <ul>
         <li
-          :class="{ 'item-selected': isActive('/coach-dashboard/clients') }"
+          :class="{ 'item-selected': isActive('/dashboard/coach/students') }"
           @click="selectedItem = 'students'"
         >
-          <router-link to="/coach-dashboard/students">
+          <router-link to="/dashboard/coach/students">
             <i class="fas fa-users indigo"></i> Alunos</router-link
           >
         </li>
         <li
-          :class="{ 'item-selected': isActive('/coach-dashboard/exercises') }"
+          :class="{ 'item-selected': isActive('/dashboard/coach/exercises') }"
           @click="selectedItem = 'workouts'"
         >
-          <router-link to="/coach-dashboard/exercises">
+          <router-link to="/dashboard/coach/exercises">
             <i class="fas fa-dumbbell text-orange-400"></i>
             Exercícios</router-link
           >
@@ -34,25 +34,25 @@ const isActive = (path: string) => route.path === path;
           :class="{ 'item-selected': isActive('/coach-dashboard/progress') }"
           @click="selectedItem = 'progress'"
         >
-          <router-link to="/coach-dashboard/progress">
+          <router-link to="/dashboard/coach/progress">
             <i class="fas fa-chart-line text-teal-400"></i>
             Progresso</router-link
           >
         </li>
         <li
-          :class="{ 'item-selected': isActive('/coach-dashboard/settings') }"
+          :class="{ 'item-selected': isActive('/dashboard/coach/settings') }"
           @click="selectedItem = 'settings'"
         >
-          <router-link to="/coach-dashboard/settings">
+          <router-link to="/dashboard/coach/settings">
             <i class="fas fa-cog text-slate-400"></i> Configurações</router-link
           >
         </li>
       </ul>
     </nav>
-    <Footer class=""
+    <footer class=""
       ><p>&copy; 2025 FitPlanner</p>
-      <p>Versão 0.1</p></Footer
-    >
+      <p>Versão 0.1</p>
+    </footer>
   </aside>
 </template>
 <style scoped>

@@ -15,12 +15,11 @@ const styleStudent = ref('student-option');
 const router = useRouter()
 
 function handleLogin() {
-  // Navigate to the dashboard or perform login logic
-  // if (role.value === 'coach') {
-  //   router.push('/dashboard/coach');
-  // } else if (role.value === 'client') {
-  //   router.push('/dashboard/client');
-  // }
+  if (role.value === 'coach') {
+    router.push('/dashboard/coach');
+  } else if (role.value === 'client') {
+    router.push('/dashboard/client');
+  }
 
   console.log('Username:', username.value);
   console.log('Password:', password.value);

@@ -8,7 +8,7 @@
             <li>Treino B</li>
             <li>Treino C</li>
         </ul>
-    </ExpandableBox> 
+    </ExpandableBox>
 </template>
 
 <script setup lang="ts">
