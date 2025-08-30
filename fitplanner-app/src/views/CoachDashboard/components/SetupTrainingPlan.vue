@@ -31,13 +31,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import type { Student } from '../../../interfaces/IStudentRepository';
 import { Button } from 'primevue';
 import Select from 'primevue/select';
-import InputNumber from 'primevue/inputnumber';
 
 import arrowForwardIcon from '../../../assets/icons/arrow_forward_black.svg';
 import arrowDownIcon from '../../../assets/icons/arrow_downward.svg';
@@ -87,61 +84,8 @@ const daysOfWeek: Array<{ label: string; value: string }> = [
     { label: 'Sábado', value: 'saturday' }
 ];
 const selectedDay: Ref<string | null> = ref(null);
-//
 
-// List of exercises (this can be replaced with a more dynamic list)
-const exercises: Array<{ label: string; value: string }> = [
-    { label: 'Agachamento', value: 'squat' },
-    { label: 'Supino Reto na máquina', value: 'bench_press' },
-    { label: 'Puxada na Barra', value: 'pull_up' },
-    { label: 'Leg Press', value: 'leg_press' },
-    { label: 'Rosca Direta', value: 'bicep_curl' },
-    { label: 'Tríceps na Polia', value: 'tricep_pushdown' },
-    { label: 'Elevação de Panturrilha', value: 'calf_raise' },
-    { label: 'Prancha', value: 'plank' },
-    { label: 'Abdução de Quadril', value: 'hip_abduction' },
-    { label: 'Flexão de Pernas', value: 'leg_curl' },
-    { label: 'Desenvolvimento de Ombros', value: 'shoulder_press' },
-    { label: 'Barra Fixa', value: 'pull_up_bar' },
-    { label: 'Cadeira Extensora', value: 'leg_extension' },
-    { label: 'Cadeira Abdutora', value: 'hip_adduction' },
-    { label: 'Puxada Frontal', value: 'lat_pulldown' },
-    { label: 'Remada Baixa', value: 'seated_row' },
-    { label: 'Rosca Martelo', value: 'hammer_curl' },
-    { label: 'Tríceps Francês', value: 'overhead_tricep_extension' },
-    { label: 'Elevação Lateral de Ombros', value: 'lateral_raise' },
-    { label: 'Levantamento Terra', value: 'deadlift' },
-    { label: 'Supino Inclinado', value: 'incline_bench_press' },
-    { label: 'Puxada na Máquina', value: 'machine_row' },
-    { label: 'Leg Press Unilateral', value: 'unilateral_leg_press' },
-    { label: 'Rosca Scott', value: 'preacher_curl' },
-    { label: 'Tríceps Testa', value: 'skull_crusher' },
-    { label: 'Levantamento Terra', value: 'deadlift' },
-    { label: 'Remada', value: 'row' },
-    { label: 'Flexão de Braços', value: 'push_up' },
-    { label: 'Abdominal', value: 'sit_up' },
-    { label: 'Cardio (esteira, bicicleta, etc.)', value: 'cardio' },
-    { label: 'Rosca Scott', value: 'scott_curl' }
-];
-const selectedExercise: Ref<string | null> = ref(null);
 
-// Repetitions input
-const reps: Ref<number | null> = ref(null);
-
-type Exercise = {
-    name: string;
-    reps: number;
-    sets: number;
-};
-
-const trainings: Ref<Array<{ dayOfWeek: string; exercises: Exercise[] }>> = ref([]);
-
-const props = defineProps({
-    student: {
-        type: Object as () => Student,
-        required: true
-    }
-});
 
 // Estado para manipular quando deve aparecer formulário de exercícios
 const showExerciseForm: Ref<boolean> = ref(false);

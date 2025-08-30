@@ -6,10 +6,10 @@ export interface IStudent {
     observations: string;
     weight: number;
     height: number;
-    gender: string;
+    gender: { value: string };
     birthDate: string;
     createdAt: Date;
-    goal: string;
+    goal: { value: string };
     userImage?: any;
     status: 'Ativo' | 'Inativo';
     hasTrainingPlan: boolean;

@@ -125,9 +125,9 @@ async function saveStudent() {
         height: studentHeight.value ?? 0,
         birthDate: studentBirthDate.value?.toISOString() ?? '',
         createdAt: new Date(),
-        gender: selectedGender.value!,
+        gender: {value: selectedGender.value!},
         observations: studentObservations.value!,
-        goal: studentGoal.value!,
+        goal: {value: studentGoal.value!},
         status: 'Ativo',
         hasTrainingPlan: false,
     };

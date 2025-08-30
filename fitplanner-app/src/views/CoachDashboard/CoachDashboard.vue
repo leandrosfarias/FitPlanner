@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
-import Header from '../../components/Header.vue';
 import Sidebar from '../../components/Sidebar.vue';
 </script>
 

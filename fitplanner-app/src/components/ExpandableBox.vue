@@ -2,7 +2,6 @@
     <div class="expandable-box">
         <h3 @click="isOpen = !isOpen" class="box-title">
             <span class="toggle-icon">{{ isOpen ? '-' : '+' }}</span>
-            {{ title }}
         </h3>
         <div v-if="isOpen" class="box-content">
             <slot></slot>
@@ -12,9 +11,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const props = defineProps<{
-    title: string;
-}>();
 
 const isOpen = ref(false);
 </script>

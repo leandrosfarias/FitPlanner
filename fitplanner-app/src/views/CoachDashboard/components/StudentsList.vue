@@ -1,6 +1,6 @@
 <template>
   <div id="students-list">
-    <StudentItem v-for="student in students" :key="student.id" :student="student" />
+    <StudentItem v-for="student in props.students" :key="student.id" :student="student" />
   </div>
 </template>
 

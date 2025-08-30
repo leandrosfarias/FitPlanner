@@ -6,9 +6,7 @@ import ExercisesScreen from '../views/CoachDashboard/components/ExercisesScreen.
 import Cadastrotreino from '../views/CoachDashboard/Cadastrotreino.vue';
 import StudentDetails from '../views/CoachDashboard/components/StudentDetails.vue';
 import StudentForm from '../views/CoachDashboard/components/StudentForm.vue';
-
-
-const routes: Array<any> = [
+const routes = [
     { path: '/', component: Login },
     {
         path: '/dashboard/coach',
@@ -21,11 +19,10 @@ const routes: Array<any> = [
             { path: 'create-student', component: StudentForm }
         ]
     }
-]
-
+];
 const router = createRouter({
     history: createWebHistory(),
     routes
-})
-
+});
 export default router;
+//# sourceMappingURL=index.js.map
