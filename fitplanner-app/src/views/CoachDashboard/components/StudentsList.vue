@@ -1,13 +1,13 @@
 <template>
-  <div id="students-list">
+  <div id="students-list">ß
     <StudentItem v-for="student in props.students" :key="student.id" :student="student" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import StudentItem from './StudentItem.vue'; 
 import type { IStudent } from '../../../models/IStudent';
+import StudentItem from './StudentItem.vue';
 
 // type Student = {
 //   id: string;

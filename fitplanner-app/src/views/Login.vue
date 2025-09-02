@@ -74,6 +74,10 @@ function selectRole(seletectedRole: string) {
         <div id="login-button-container">
           <button type="submit" @click="handleLogin" id="login-button">Entrar</button>
         </div>
+
+        <div>
+          <p>Não tem uma conta? <router-link to="/register">Registre-se</router-link></p>
+        </div>
       </form>
     </div>
   </div>

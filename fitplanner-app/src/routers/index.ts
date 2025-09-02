@@ -6,10 +6,11 @@ import ExercisesScreen from '../views/CoachDashboard/components/ExercisesScreen.
 import Cadastrotreino from '../views/CoachDashboard/Cadastrotreino.vue';
 import StudentDetails from '../views/CoachDashboard/components/StudentDetails.vue';
 import StudentForm from '../views/CoachDashboard/components/StudentForm.vue';
-
+import CoachRegister from '../views/CoachRegister.vue';
 
 const routes: Array<any> = [
     { path: '/', component: Login },
+    { path: '/register', component: CoachRegister },
     {
         path: '/dashboard/coach',
         component: CoachDashboard,
@@ -20,12 +21,16 @@ const routes: Array<any> = [
             { path: 'students/:id', name: 'student-details', component: StudentDetails },
             { path: 'create-student', component: StudentForm }
         ]
-    }
+    },
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes
 })
+
+for (const route of routes) {
+    router.addRoute(route)
+}
 
 export default router;
