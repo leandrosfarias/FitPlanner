@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../services/api'
+import ProgressSpinner from 'primevue/progressspinner';
+import { useAuthStore } from '../stores/auth';
+
+const authStore = useAuthStore();
 
 const username = ref('')
 const password = ref('')
 const role = ref('')
+const isLoading = ref(false)
 
 const className = ref('role-option');
 
@@ -13,9 +19,33 @@ const styleStudent = ref('student-option');
 
 const router = useRouter()
 
-function handleLogin() {
+async function handleLogin() {
   if (role.value === 'coach') {
-    router.push('/dashboard/coach');
+    isLoading.value = true;
+    const loginData = new URLSearchParams()
+    loginData.append("grant_type", "password")
+    loginData.append("username", username.value)
+    loginData.append("password", password.value)
+
+    const response = await api.post('/coach/login/', loginData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+
+    if (response.status === 200) {
+      console.log('Login successful:', response.data)
+      authStore.login(response.data.access_token, {
+        id: response.data.coach_id,
+        username: response.data.username,
+        email: response.data.email
+      });
+      router.push('/dashboard/coach')
+      isLoading.value = false;
+    } else {
+      console.error('Login failed:', response.data)
+      isLoading.value = false;
+    }
   } else if (role.value === 'client') {
     router.push('/dashboard/client');
   }
@@ -75,10 +105,15 @@ function selectRole(seletectedRole: string) {
           <button type="submit" @click="handleLogin" id="login-button">Entrar</button>
         </div>
 
+        <div id="container-spinner">
+          <ProgressSpinner v-if="isLoading" />
+        </div>
+
         <div>
           <p>Não tem uma conta? <router-link to="/register">Registre-se</router-link></p>
         </div>
       </form>
+
     </div>
   </div>
 </template>
@@ -303,6 +338,13 @@ h1 {
   /* sm:text-sm */
   line-height: 1.25rem;
   /* sm:text-sm (line-height padrão para text-sm) */
+}
+
+#container-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 /* Se você quisesse aplicar sm:text-sm apenas em telas pequenas, seria assim: */

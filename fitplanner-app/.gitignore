@@ -9,6 +9,10 @@ lerna-debug.log*
 
 node_modules
 dist
+/dist/
+/build/
+*.js.map
+*.vue.js
 dist-ssr
 *.local
 

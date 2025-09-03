@@ -1,5 +1,5 @@
 <template>
-  <div id="students-list">ß
+  <div id="students-list">
     <StudentItem v-for="student in props.students" :key="student.id" :student="student" />
   </div>
 </template>

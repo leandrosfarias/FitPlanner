@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import api from '../services/api';
+import ProgressSpinner from 'primevue/progressspinner';
+import { useRouter } from 'vue-router';
+
+const isLoading = ref(false);
+const router = useRouter();
 
 const completeName = ref('');
 const username = ref('');
@@ -10,6 +15,7 @@ const confirmPassword = ref('');
 const phone = ref('');
 
 async function handleRegister() {
+  isLoading.value = true;
   console.log('Nome:', completeName.value);
   console.log('Usuário:', username.value);
   console.log('Email:', email.value);
@@ -26,8 +32,11 @@ async function handleRegister() {
 
   if (response.status === 201) {
     console.log('Cadastro realizado com sucesso:', response.data);
+    isLoading.value = false;
+    router.push('/');
   } else {
     console.error('Erro ao cadastrar:', response.data);
+    isLoading.value = false;
   }
 }
 </script>
@@ -35,7 +44,7 @@ async function handleRegister() {
 <template>
   <div id="register-page">
     <h1>Registrar Treinador</h1>
-    <form @submit.prevent="handleRegister">
+    <div id="register-form">
       <div>
         <label for="name">Nome Completo:</label>
         <input type="text" id="name" v-model="completeName" required placeholder="ex: Lucas Lima Cruz"/>
@@ -61,7 +70,10 @@ async function handleRegister() {
         <input type="password" id="confirm-password" v-model="confirmPassword" required placeholder="********"/>
       </div>
       <button @click="handleRegister">Registrar</button>
-    </form>
+      <div id="container-spinner">
+        <ProgressSpinner v-if="isLoading" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -75,13 +87,14 @@ async function handleRegister() {
     justify-content: center;
     min-height: 100vh;
     background: linear-gradient(to bottom right, #6366F1, #9333EA);
+    overflow: auto;
 }
 
 h1 {
     color: #fff;
 }
 
-form {
+#register-form {
     background: #fff;
     padding: 2rem;
     border-radius: 8px;
@@ -90,23 +103,23 @@ form {
     width: 35%;
 }
 
-form div {
+#register-form div {
     margin-bottom: 1rem;
 }
 
-form label {
+#register-form label {
     display: block;
     margin-bottom: 0.5rem;
 }
 
-form input {
+#register-form input {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-form button {
+#register-form button {
     background: #6366F1;
     color: #fff;
     border: none;
@@ -116,7 +129,13 @@ form button {
     width: 100%;
 }
 
-form button:hover {
+#register-form button:hover {
     background: #4F46E5;
+}
+
+#container-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
