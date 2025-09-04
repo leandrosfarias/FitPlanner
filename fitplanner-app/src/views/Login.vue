@@ -19,7 +19,7 @@ const styleStudent = ref('student-option');
 
 const router = useRouter()
 
-async function handleLogin() {
+function handleLogin() {
   if (role.value === 'coach') {
     isLoading.value = true;
     const loginData = new URLSearchParams()
@@ -27,13 +27,11 @@ async function handleLogin() {
     loginData.append("username", username.value)
     loginData.append("password", password.value)
 
-    const response = await api.post('/coach/login/', loginData, {
+    api.post('/coach/login/', loginData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
-    })
-
-    if (response.status === 200) {
+    }).then(response => {
       console.log('Login successful:', response.data)
       authStore.login(response.data.access_token, {
         id: response.data.coach_id,
@@ -42,10 +40,11 @@ async function handleLogin() {
       });
       router.push('/dashboard/coach')
       isLoading.value = false;
-    } else {
-      console.error('Login failed:', response.data)
+
+    }).catch(error => {
+      console.error('Login failed:', error.response.data)
       isLoading.value = false;
-    }
+    });
   } else if (role.value === 'client') {
     router.push('/dashboard/client');
   }

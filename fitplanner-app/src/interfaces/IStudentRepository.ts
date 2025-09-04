@@ -9,7 +9,6 @@ export interface IStudent {
     gender: { value: string };
     birthDate: string;
     createdAt: Date;
-    goal: { value: string };
     userImage?: any;
     status: 'Ativo' | 'Inativo';
     hasTrainingPlan: boolean;

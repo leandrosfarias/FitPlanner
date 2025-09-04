@@ -9,28 +9,37 @@
           <h5>Informações Pessoais</h5>
           <div class="input-row">
             <label class="input-label">
-              Nome Completo
+              <div class="label-required">
+                Nome Completo
+                <span>*</span>
+              </div>
               <InputText v-model="studentName" placeholder="ex: Leandro Farinha" type="text" fluid />
             </label>
             <label class="input-label">
-              Email
+              <div class="label-required">
+                Email
+                <span>*</span>
+              </div>
               <InputText v-model="studentEmail" placeholder="ex: leandro@email.com" type="email" fluid />
             </label>
           </div>
           <div class="input-row">
             <label class="input-label">
-              Celular
-              <InputMask v-model="studentPhone" placeholder="ex: (11) 99999-9999" mask="(99) 99999-9999" fluid />
+              <div class="label-required">
+                Data de Nascimento
+                <span>*</span>
+              </div>
+              <DatePicker v-model="studentBirthDate" placeholder="Data de Nascimento" class="p-datepicker" dateFormat="dd/mm/yy" fluid />
             </label>
             <label class="input-label">
-              Data de Nascimento
-              <DatePicker v-model="studentBirthDate" placeholder="Data de Nascimento" class="p-datepicker" fluid />
+              Celular
+              <InputMask v-model="studentPhone" placeholder="ex: (11) 99999-9999" mask="(99) 99999-9999" fluid />
             </label>
           </div>
         </div>
 
         <div class="form-group">
-          <h5>Dados Físicos e Objetivos</h5>
+          <h5>Dados Físicos e Observações</h5>
           <div class="input-row">
             <label class="input-label">
               Peso (kg)
@@ -43,12 +52,20 @@
           </div>
           <div class="input-row">
             <label class="input-label">
-              Gênero
-              <Select v-model="selectedGender" :options="genderOptions" optionLabel="label" placeholder="Selecione um Gênero" fluid />
+              Circuferência do braço (cm)
+              <InputNumber v-model="studentArmCircumference" placeholder="ex: 30.0" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
             </label>
             <label class="input-label">
-              Objetivo
-              <Select v-model="studentGoal" :options="goals" optionLabel="label" placeholder="Selecione um Objetivo" fluid />
+              Circuferência da perna (cm)
+              <InputNumber v-model="studentLegCircumference" placeholder="ex: 30.0" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
+            </label>
+            <label class="input-label">
+              Circuferência do peito (cm)
+              <InputNumber v-model="studentChestCircumference" placeholder="ex: 30.0" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
+            </label>
+            <label class="input-label">
+              Gênero
+              <Select v-model="selectedGender" :options="genderOptions" optionLabel="label" placeholder="Selecione um Gênero" fluid />
             </label>
           </div>
           <div class="input-row-single">
@@ -60,6 +77,7 @@
         </div>
       </div>
       <div class="container-button">
+        <Button @click="resetForm" label="Limpar" class="btn-secondary" />
         <Button @click="saveStudent" label="Salvar Aluno" class="btn-primary" :disabled="disabledButton" />
       </div>
     </div>
@@ -80,27 +98,27 @@ import type { Ref } from 'vue';
 import { LocalStudentRepository } from '../../../services/LocalStudentRepository';
 import type { IStudent } from '../../../interfaces/IStudentRepository';
 import { v4 as uuidv4 } from 'uuid';
+import { StudentService } from '../../../services/StudentService';
+import type { StudentData } from '../../../services/StudentService';
+import { useAuthStore } from '../../../stores/auth';
 
 const router = useRouter();
 const studentRepository = new LocalStudentRepository();
+const authStore = useAuthStore();
+const studentService = new StudentService(authStore);
 
 const studentName: Ref<string> = ref('');
 const studentEmail: Ref<string> = ref('');
 const studentPhone: Ref<string> = ref('');
 const studentWeight: Ref<number | null> = ref(null);
 const studentHeight: Ref<number | null> = ref(null);
+const studentArmCircumference: Ref<number | null> = ref(null);
+const studentLegCircumference: Ref<number | null> = ref(null);
+const studentChestCircumference: Ref<number | null> = ref(null);
 const studentBirthDate: Ref<Date | null> = ref(null);
 const studentObservations: Ref<string | null> = ref(null);
-const studentGoal: Ref<string | null> = ref(null);
 const selectedGender: Ref<string | null> = ref(null);
 
-const goals = [
-    { label: 'Emagrecimento', value: 'Emagrecimento' },
-    { label: 'Hipertrofia', value: 'Hipertrofia' },
-    { label: 'Definição Muscular', value: 'Definição Muscular' },
-    { label: 'Aumento de Força', value: 'Aumento de Força' },
-    { label: 'Melhora de Performance', value: 'Melhora de Performance' }
-];
 
 const genderOptions = [
     { label: 'Masculino', value: 'Masculino' },
@@ -112,30 +130,59 @@ const disabledButton: Ref<boolean> = ref(true);
 
 watchEffect(() => {
     // Habilita o botão apenas se os campos obrigatórios estiverem preenchidos
-    disabledButton.value = !studentName.value || !studentEmail.value || studentWeight.value === null || studentHeight.value === null || studentBirthDate.value === null || studentGoal.value === null || selectedGender.value === null;
+    disabledButton.value = !studentName.value || !studentEmail.value || studentBirthDate.value === null;
 });
 
+function mapGender(gender: string) {
+  switch (gender) {
+    case 'Masculino':
+      return 'M';
+    case 'Feminino':
+      return 'F';
+    case 'Outro':
+      return 'O';
+    default:
+      return 'O';
+  }
+}
+
+function mapDate(date: Date | null) {
+  return date ? date.toISOString().split('T')[0] : null;
+}
+
 async function saveStudent() {
-    const newStudent: IStudent = {
-        id: uuidv4(),
-        name: studentName.value,
+  console.log('data ', studentBirthDate.value);
+    const newStudent: StudentData = {
+        complete_name: studentName.value,
         email: studentEmail.value,
         phone: studentPhone.value,
-        weight: studentWeight.value ?? 0,
-        height: studentHeight.value ?? 0,
-        birthDate: studentBirthDate.value?.toISOString() ?? '',
-        createdAt: new Date(),
-        gender: {value: selectedGender.value!},
-        observations: studentObservations.value!,
-        goal: {value: studentGoal.value!},
-        status: 'Ativo',
-        hasTrainingPlan: false,
+        weight_kg: studentWeight.value ?? 0,
+        height_cm: studentHeight.value ?? 0,
+        birth_date: mapDate(studentBirthDate.value)!,
+        gender: mapGender(selectedGender.value!),
+        observations: studentObservations.value ?? '',
+        arm_circumference_cm: studentArmCircumference.value ?? 0,
+        leg_circumference_cm: studentLegCircumference.value ?? 0,
+        chest_circumference_cm: studentChestCircumference.value ?? 0
     };
 
-    await studentRepository.add(newStudent);
-    
-    // Após salvar, redireciona para a tela de alunos
-    router.push({ path: '/dashboard/coach/students' });
+    const response = await studentService.createStudent(newStudent);
+    console.log(response);
+    // router.push({ path: '/dashboard/coach/students' });
+}
+
+function resetForm() {
+  studentName.value = '';
+  studentEmail.value = '';
+  studentPhone.value = '';
+  studentWeight.value = null;
+  studentHeight.value = null;
+  studentArmCircumference.value = null;
+  studentLegCircumference.value = null;
+  studentChestCircumference.value = null;
+  studentBirthDate.value = null;
+  studentObservations.value = null;
+  selectedGender.value = null;
 }
 </script>
 
@@ -158,6 +205,7 @@ async function saveStudent() {
   border-bottom: 2px solid #e2e8f0;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .header-form h4 {
@@ -199,8 +247,9 @@ async function saveStudent() {
 
 .container-button {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 2rem;
+  gap: 1rem;
 }
 
 .btn-primary {
@@ -221,6 +270,17 @@ async function saveStudent() {
 .btn-primary:disabled {
   background-color: #a0aec0;
   cursor: not-allowed;
+}
+
+.label-required {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0;
+}
+
+.label-required span {
+  color: red;
 }
 
 /* Responsividade */

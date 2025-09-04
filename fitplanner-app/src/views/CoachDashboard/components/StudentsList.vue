@@ -9,12 +9,6 @@ import { defineProps } from 'vue';
 import type { IStudent } from '../../../models/IStudent';
 import StudentItem from './StudentItem.vue';
 
-// type Student = {
-//   id: string;
-//   name: string;
-//   email: string;
-//   status: 'Ativo' | 'Inativo';
-// };
 
 const props = defineProps({
   students: {
