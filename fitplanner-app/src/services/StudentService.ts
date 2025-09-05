@@ -6,13 +6,6 @@ export interface StudentData {
     email: string;
     birth_date: string;
     phone: string | null;
-    weight_kg: number | null;
-    height_cm: number | null;
-    arm_circumference_cm: number | null;
-    leg_circumference_cm: number | null;
-    chest_circumference_cm: number | null;
-    observations: string | null;
-    gender: string | null;
 }
 
 
@@ -24,24 +17,92 @@ export class StudentService {
     }
 
     async getAllStudents() {
-        const response = await api.get("/students");
-        return response.data;
+        try {
+            let response;
+            response = await api.get("/students",
+                {
+                    headers: {
+                        Authorization: `Bearer ${this.authStore.getToken}`
+                    }
+                }
+            );
+
+            return response.data;
+        } catch (error: any) {
+            if (error.response.status === 401) {
+                try {
+                    let response;
+                    response = await api.get("/students",
+                        {
+                            headers: {
+                                Authorization: `Bearer ${this.authStore.getRefreshToken}`
+                            }
+                        }
+                    );
+                    return response.data;
+                } catch (error: any) {
+                    throw error;
+                }
+            }
+        }
     }
 
-    async getStudentById(id: string) {
-        const response = await api.get(`/students/${id}`);
-        return response.data;
+    async getStudentById(id: string): Promise<any> {
+        let response;
+        try {
+            response = await api.get(`/student/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${this.authStore.getToken}`
+                }
+            });
+            return response.data;
+        } catch (error: any) {
+            if (error.response.status === 401) {
+                try {
+                    const refreshToken = this.authStore.getRefreshToken;
+                    response = await api.get(`/student/${id}`, {
+                        headers: {
+                            Authorization: `Bearer ${refreshToken}`
+                        }
+                    });
+                    return response.data;
+                } catch (error: any) {
+                    throw error;
+                }
+            }
+        }
     }
 
     async createStudent(studentData: StudentData) {
         const token = this.authStore.getToken;
         console.log("Token in StudentService:", token);
-        const response = await api.post("/student", studentData, {
-            headers: {
-                Authorization: `Bearer ${token}`
+
+        try {
+            const response = await api.post("/student", studentData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error: any) {
+            if (error.response && error.response.status === 401) {
+                console.log("Token expired, attempting to refresh token...");
+                try {
+                    const refreshToken = this.authStore.getRefreshToken;
+                    const newResponse = await api.post("/student", studentData, {
+                        headers: {
+                            Authorization: `Bearer ${refreshToken}`
+                        }
+                    });
+                    return newResponse.data;
+                } catch (refreshError) {
+                    console.error("Refresh token failed, user must re-authenticate.");
+                    this.authStore.logout();
+                    throw refreshError;
+                }
             }
-        });
-        return response.data;
+            throw error;
+        }
     }
 
     async updateStudent(id: string, studentData: any) {

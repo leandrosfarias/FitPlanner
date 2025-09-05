@@ -38,14 +38,16 @@
 import { onMounted, ref } from 'vue';
 import StudentsList from './StudentsList.vue';
 import type { IStudent } from '../../../interfaces/IStudentRepository';
-import { LocalStudentRepository } from '../../../services/LocalStudentRepository';
+import { StudentService } from '../../../services/StudentService';
+import { useAuthStore } from '../../../stores/auth';
 
-const studentRepository = new LocalStudentRepository();
+const authStore = useAuthStore();
+const studentService = new StudentService(authStore);
 const students = ref<IStudent[]>([]);
 
 
 onMounted(async () => {
-    students.value = await studentRepository.getAll();
+    students.value = await studentService.getAllStudents();
     console.log('Fetched students:', students.value);
 });
 

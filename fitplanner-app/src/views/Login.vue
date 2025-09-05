@@ -33,7 +33,9 @@ function handleLogin() {
       }
     }).then(response => {
       console.log('Login successful:', response.data)
-      authStore.login(response.data.access_token, {
+      authStore.login(response.data.access_token, 
+      response.data.refresh_token,
+      {
         id: response.data.coach_id,
         username: response.data.username,
         email: response.data.email

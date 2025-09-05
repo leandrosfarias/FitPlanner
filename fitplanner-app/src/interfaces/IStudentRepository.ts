@@ -1,16 +1,18 @@
 export interface IStudent {
     id: string;
-    name: string;
+    complete_name: string;
     email: string;
     phone: string;
     observations: string;
-    weight: number;
-    height: number;
+    weight_kg: number;
+    height_cm: number;
     gender: { value: string };
-    birthDate: string;
-    createdAt: Date;
-    userImage?: any;
-    status: 'Ativo' | 'Inativo';
+    birth_date: string;
+    created_at: Date;
+    arm_circumference_cm: number;
+    leg_circumference_cm: number;
+    chest_circumference_cm: number;
+    status: 'active' | 'inactive';
     hasTrainingPlan: boolean;
 }
 

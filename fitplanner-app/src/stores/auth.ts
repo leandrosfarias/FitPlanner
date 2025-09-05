@@ -9,15 +9,22 @@ interface User {
 
 export const useAuthStore = defineStore('auth', () => {
     const token = ref<string | null>(sessionStorage.getItem('token'));
+    const refreshToken = ref<string | null>(sessionStorage.getItem('refreshToken'));
     const user = ref<User | null>(null);
 
     const isLoggedIn = computed<boolean>(() => !!token.value);
     const getUser = computed<User | null>(() => user.value);
     const getToken = computed<string | null>(() => token.value);
+    const getRefreshToken = computed<string | null>(() => refreshToken.value);
 
     const setToken = (newToken: string) => {
         token.value = newToken;
         sessionStorage.setItem('token', newToken);
+    };
+
+    const setRefreshToken = (newRefreshToken: string) => {
+        refreshToken.value = newRefreshToken;
+        sessionStorage.setItem('refreshToken', newRefreshToken);
     };
 
     const clearToken = () => {
@@ -35,8 +42,9 @@ export const useAuthStore = defineStore('auth', () => {
         sessionStorage.removeItem('user');
     };
 
-    const login = async (loginToken: string, userData: User) => {
+    const login = async (loginToken: string, refreshToken: string, userData: User) => {
         setToken(loginToken);
+        setRefreshToken(refreshToken);
         setUser(userData);
     };
 
@@ -51,6 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn,
         getUser,
         getToken,
+        getRefreshToken,
         login,
         logout,
     };

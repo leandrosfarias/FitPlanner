@@ -37,44 +37,6 @@
             </label>
           </div>
         </div>
-
-        <div class="form-group">
-          <h5>Dados Físicos e Observações</h5>
-          <div class="input-row">
-            <label class="input-label">
-              Peso (kg)
-              <InputNumber v-model="studentWeight" placeholder="Peso" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
-            </label>
-            <label class="input-label">
-              Altura (cm)
-              <InputNumber v-model="studentHeight" placeholder="Altura" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
-            </label>
-          </div>
-          <div class="input-row">
-            <label class="input-label">
-              Circuferência do braço (cm)
-              <InputNumber v-model="studentArmCircumference" placeholder="ex: 30.0" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
-            </label>
-            <label class="input-label">
-              Circuferência da perna (cm)
-              <InputNumber v-model="studentLegCircumference" placeholder="ex: 30.0" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
-            </label>
-            <label class="input-label">
-              Circuferência do peito (cm)
-              <InputNumber v-model="studentChestCircumference" placeholder="ex: 30.0" mode="decimal" fluid :minFractionDigits="2" :maxFractionDigits="5" />
-            </label>
-            <label class="input-label">
-              Gênero
-              <Select v-model="selectedGender" :options="genderOptions" optionLabel="label" placeholder="Selecione um Gênero" fluid />
-            </label>
-          </div>
-          <div class="input-row-single">
-            <label class="input-label">
-              Observações sobre o Aluno
-              <Textarea v-model="studentObservations" placeholder="ex: Tem a coluna torta" rows="3" fluid />
-            </label>
-          </div>
-        </div>
       </div>
       <div class="container-button">
         <Button @click="resetForm" label="Limpar" class="btn-secondary" />
@@ -85,25 +47,20 @@
 </template>
 
 <script setup lang="ts">
-import InputText from 'primevue/inputtext';
-import InputNumber from 'primevue/inputnumber';
-import InputMask from 'primevue/inputmask';
 import Button from 'primevue/button';
-import Select from 'primevue/select';
 import DatePicker from 'primevue/datepicker';
-import Textarea from 'primevue/textarea';
-import { useRouter } from 'vue-router';
-import { ref, watchEffect } from 'vue';
+import InputMask from 'primevue/inputmask';
+import InputText from 'primevue/inputtext';
+import { useToast } from 'primevue/usetoast';
 import type { Ref } from 'vue';
-import { LocalStudentRepository } from '../../../services/LocalStudentRepository';
-import type { IStudent } from '../../../interfaces/IStudentRepository';
-import { v4 as uuidv4 } from 'uuid';
-import { StudentService } from '../../../services/StudentService';
+import { ref, watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
 import type { StudentData } from '../../../services/StudentService';
+import { StudentService } from '../../../services/StudentService';
 import { useAuthStore } from '../../../stores/auth';
 
 const router = useRouter();
-const studentRepository = new LocalStudentRepository();
+const toast = useToast();
 const authStore = useAuthStore();
 const studentService = new StudentService(authStore);
 
@@ -156,19 +113,21 @@ async function saveStudent() {
         complete_name: studentName.value,
         email: studentEmail.value,
         phone: studentPhone.value,
-        weight_kg: studentWeight.value ?? 0,
-        height_cm: studentHeight.value ?? 0,
-        birth_date: mapDate(studentBirthDate.value)!,
-        gender: mapGender(selectedGender.value!),
-        observations: studentObservations.value ?? '',
-        arm_circumference_cm: studentArmCircumference.value ?? 0,
-        leg_circumference_cm: studentLegCircumference.value ?? 0,
-        chest_circumference_cm: studentChestCircumference.value ?? 0
+        birth_date: mapDate(studentBirthDate.value)!
     };
 
     const response = await studentService.createStudent(newStudent);
-    console.log(response);
-    // router.push({ path: '/dashboard/coach/students' });
+    console.log('response ', response);
+    if (response) {
+      toast.add(
+        { 
+          severity: 'success', 
+          summary: 'Sucesso', 
+          detail: 'Aluno criado com sucesso!',
+          life: 3000
+        });
+      router.push({ path: '/dashboard/coach/students' });
+    }
 }
 
 function resetForm() {

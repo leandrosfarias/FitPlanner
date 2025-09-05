@@ -1,6 +1,6 @@
 export interface IStudent {
     id: string;
-    name: string;
+    complete_name: string;
     email: string | null;
-    status: 'Ativo' | 'Inativo';
+    status: 'active' | 'inactive';
 }

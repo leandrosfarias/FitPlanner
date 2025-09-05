@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{ name: 'student-details', params: { id: student.id } }" class="student-card">
     <div class="student-info">
-      <h3>{{ student.name }}</h3>
+      <h3>{{ student.complete_name }}</h3>
       <p>{{ student.email }}</p>
     </div>
     <span :class="statusClass">{{ student.status }}</span>
@@ -25,7 +25,7 @@ const props = defineProps<{
 }>();
 
 const statusClass = computed(() => {
-  return props.student.status === 'Ativo' ? 'status-active' : 'status-inactive';
+  return props.student.status === 'active' ? 'status-active' : 'status-inactive';
 });
 </script>
 
